@@ -1,0 +1,384 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.rdd.RDD\r\nimport org.apache.spark.mllib.fpm.FPGrowth\r\n\r\nval data \u003d sc.textFile(\"/home/ar/workspace/rudang-gpa.txt\")\r\n\r\nval transactions: RDD[Array[String]] \u003d data.map(s \u003d\u003e s.trim.split(\u0027,\u0027).distinct)",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 11:54:37.489",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.rdd.RDD\nimport org.apache.spark.mllib.fpm.FPGrowth\ndata: org.apache.spark.rdd.RDD[String] \u003d /home/ar/workspace/rudang-gpa.txt MapPartitionsRDD[593] at textFile at \u003cconsole\u003e:69\ntransactions: org.apache.spark.rdd.RDD[Array[String]] \u003d MapPartitionsRDD[594] at map at \u003cconsole\u003e:71\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557316387017_65990984",
+      "id": "20190508-085733_333750401",
+      "dateCreated": "2019-05-08 11:53:07.017",
+      "dateStarted": "2019-05-08 11:54:37.550",
+      "dateFinished": "2019-05-08 11:54:39.858",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val fpg \u003d new FPGrowth()\r\nfpg.setMinSupport(0.01)\r\nfpg.setNumPartitions(10)\r\nval model \u003d fpg.run(transactions)\r\n\r\nmodel.freqItemsets.collect().foreach { itemset \u003d\u003e\r\n  println(itemset.items.mkString(\"[\", \",\", \"]\") + \", \" + itemset.freq)\r\n}\r\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 12:00:05.201",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[3.38], 8\n[国家级:二等奖], 15\n[党员], 157\n[省级:三等奖], 14\n[三等奖], 110\n[三等奖,党员], 16\n[3.22], 8\n[二等奖], 109\n[二等奖,党员], 42\n[学习优秀奖], 12\n[3.25], 11\n[一等奖], 72\n[一等奖,党员], 33\n[3.01], 10\n[社会工作奖], 35\n[社会工作奖,党员], 11\n[学习进步奖], 34\n[3.42], 10\n[3.09], 9\n[社会实践奖], 31\n[社会实践奖,党员], 9\n[3.17], 8\n[省级:二等奖], 29\n[省级:二等奖,二等奖], 9\n[省级:二等奖,党员], 17\n[文体活动奖], 27\n[3.45], 8\n[市级:三等奖], 8\n[市级:三等奖,省级:三等奖], 8\n[特等奖], 24\n[特等奖,党员], 14\nfpg: org.apache.spark.mllib.fpm.FPGrowth \u003d org.apache.spark.mllib.fpm.FPGrowth@5971d21f\nmodel: org.apache.spark.mllib.fpm.FPGrowthModel[String] \u003d org.apache.spark.mllib.fpm.FPGrowthModel@1d199d67\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557316387023_846119930",
+      "id": "20190508-052342_1380377597",
+      "dateCreated": "2019-05-08 11:53:07.023",
+      "dateStarted": "2019-05-08 12:00:05.226",
+      "dateFinished": "2019-05-08 12:00:06.609",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val minConfidence \u003d 0.1\r\nval rules \u003d model.generateAssociationRules(minConfidence).collect();\r\nrules.foreach { rule \u003d\u003e\r\n  {\r\n      if(rule.consequent(0) \u003d\u003d \"党员\"){\r\n          \r\n            println(\r\n    rule.antecedent.mkString(\"[\", \",\", \"]\")\r\n      + \" \u003d\u003e \" + rule.consequent.mkString(\"[\", \",\", \"]\")\r\n      + \", \" + rule.confidence)\r\n      }\r\n  }\r\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 12:00:24.248",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[一等奖] \u003d\u003e [党员], 0.4583333333333333\n[三等奖] \u003d\u003e [党员], 0.14545454545454545\n[二等奖] \u003d\u003e [党员], 0.3853211009174312\n[省级:二等奖] \u003d\u003e [党员], 0.5862068965517241\n[社会工作奖] \u003d\u003e [党员], 0.3142857142857143\n[特等奖] \u003d\u003e [党员], 0.5833333333333334\n[社会实践奖] \u003d\u003e [党员], 0.2903225806451613\nminConfidence: Double \u003d 0.1\nrules: Array[org.apache.spark.mllib.fpm.AssociationRules.Rule[String]] \u003d Array({一等奖} \u003d\u003e {党员}: (confidence: 0.4583333333333333; lift: Some(2.1515392781316347)), {三等奖} \u003d\u003e {党员}: (confidence: 0.14545454545454545; lift: Some(0.6828025477707006)), {二等奖} \u003d\u003e {党员}: (confidence: 0.3853211009174312; lift: Some(1.8088003272366038)), {党员} \u003d\u003e {三等奖}: (confidence: 0.10191082802547771; lift: Some(0.6828025477707007)), {党员} \u003d\u003e {二等奖}: (confidence: 0.267515923566879; lift: Some(1.8088003272366038)), {党员} \u003d\u003e {一等奖}: (confidence: 0.21019108280254778; lift: Some(2.1515392781316347)), {党员} \u003d\u003e {省级:二等奖}: (confidence: 0.10828025477707007; lift: Some(2.7518119920931254)), {省级:三等奖} \u003d\u003e {市级:三等奖}: (confidence: 0.5714285714285714; lift: Some(52.642857142857146)), {省级:二等奖} \u003d\u003e {二等奖}: (confidenc..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557316740580_-1646085363",
+      "id": "20190508-115900_2072025852",
+      "dateCreated": "2019-05-08 11:59:00.580",
+      "dateStarted": "2019-05-08 12:00:24.262",
+      "dateFinished": "2019-05-08 12:00:25.423",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import Array._\ncase class Kaoyan(antecedent: Array[String], consequent: String, confidence: Double)\n\nvar kaoyantable:Array[Kaoyan] \u003d new Array[Kaoyan](0);\nrules.foreach(item \u003d\u003e {\n    if(item.consequent(0) \u003d\u003d \"党员\"){\n        kaoyantable \u003d concat(kaoyantable, Array(Kaoyan(item.antecedent, item.consequent(0), item.confidence)));\n    }\n});\nval tmp \u003d sc.parallelize(kaoyantable).toDF()\ntmp.registerTempTable(\"kaoyan\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 12:00:47.081",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "warning: there was one deprecation warning; re-run with -deprecation for details\nimport sqlContext.implicits._\nimport Array._\ndefined class Kaoyan\nkaoyantable: Array[Kaoyan] \u003d Array(Kaoyan([Ljava.lang.String;@2e24cc2b,党员,0.4583333333333333), Kaoyan([Ljava.lang.String;@5ec1019c,党员,0.14545454545454545), Kaoyan([Ljava.lang.String;@75d71ce0,党员,0.3853211009174312), Kaoyan([Ljava.lang.String;@2b640354,党员,0.5862068965517241), Kaoyan([Ljava.lang.String;@2329d787,党员,0.3142857142857143), Kaoyan([Ljava.lang.String;@7532ff9f,党员,0.5833333333333334), Kaoyan([Ljava.lang.String;@38cfcdc5,党员,0.2903225806451613))\ntmp: org.apache.spark.sql.DataFrame \u003d [antecedent: array\u003cstring\u003e, consequent: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557316387024_2050388833",
+      "id": "20190508-052352_475012473",
+      "dateCreated": "2019-05-08 11:53:07.024",
+      "dateStarted": "2019-05-08 12:00:47.089",
+      "dateFinished": "2019-05-08 12:00:51.939",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql \nselect\n* \nfrom \nkaoyan",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 12:02:14.371",
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": true,
+              "setting": {
+                "table": {
+                  "tableGridState": {
+                    "columns": [
+                      {
+                        "name": "antecedent",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {
+                          "priority": 0.0,
+                          "direction": "desc"
+                        },
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "consequent",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "confidence",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      }
+                    ],
+                    "scrollFocus": {},
+                    "selection": [],
+                    "grouping": {
+                      "grouping": [],
+                      "aggregations": [],
+                      "rowExpandedStates": {}
+                    },
+                    "treeView": {},
+                    "pagination": {
+                      "paginationCurrentPage": 1.0,
+                      "paginationPageSize": 250.0
+                    }
+                  },
+                  "tableColumnTypeState": {
+                    "names": {
+                      "antecedent": "string",
+                      "consequent": "string",
+                      "confidence": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "stackedAreaChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default",
+                  "stacked": false
+                },
+                "pieChart": {},
+                "lineChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "rotate"
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "antecedent",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "confidence",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "antecedent\tconsequent\tconfidence\nWrappedArray(一等奖)\t党员\t0.4583333333333333\nWrappedArray(三等奖)\t党员\t0.14545454545454545\nWrappedArray(二等奖)\t党员\t0.3853211009174312\nWrappedArray(省级:二等奖)\t党员\t0.5862068965517241\nWrappedArray(社会工作奖)\t党员\t0.3142857142857143\nWrappedArray(特等奖)\t党员\t0.5833333333333334\nWrappedArray(社会实践奖)\t党员\t0.2903225806451613\n"
+          },
+          {
+            "type": "TEXT",
+            "data": ""
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557316387024_-382277703",
+      "id": "20190508-090935_1557876003",
+      "dateCreated": "2019-05-08 11:53:07.025",
+      "dateStarted": "2019-05-08 12:00:57.165",
+      "dateFinished": "2019-05-08 12:00:59.538",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%spark\n// if(rule.consequent(0) \u003d\u003d \"党员\"){\n//     println(\n//         rule.antecedent.mkString(\"[\", \",\", \"]\")\n//         + \" \u003d\u003e \" + rule.consequent.mkString(\"[\", \",\", \"]\")\n//         + \", \" + rule.confidence)\n// }\nval minConfidence \u003d 0.1\nval rules \u003d model.generateAssociationRules(minConfidence).collect();\nvar count:Int \u003d 0;\nrules.foreach { rule \u003d\u003e\n  {\n      if(rule.consequent(0) \u003d\u003d \"党员\"){\n        var map \u003d new java.util.HashMap[String, String]();\n        map.put(\"antecedent\", rule.antecedent.mkString(\",\"));\n        map.put(\"consequent\", rule.consequent(0));\n        map.put(\"confidence\", rule.confidence + \"\");\n        count +\u003d 1;\n        jedis.hmset(\"rd_gpa_rule\" + count, map)\n      }\n  }\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 14:04:10.138",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "java.net.ConnectException: Connection refused (Connection refused)\n\tat java.net.PlainSocketImpl.socketConnect(Native Method)\n\tat java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)\n\tat java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)\n\tat java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)\n\tat java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)\n\tat java.net.Socket.connect(Socket.java:589)\n\tat org.apache.thrift.transport.TSocket.open(TSocket.java:182)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:51)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:37)\n\tat org.apache.commons.pool2.BasePooledObjectFactory.makeObject(BasePooledObjectFactory.java:60)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.getClient(RemoteInterpreterProcess.java:62)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.callRemoteFunction(RemoteInterpreterProcess.java:133)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:228)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:437)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:188)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:315)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557316387025_-1469108972",
+      "id": "20190508-101433_2016141186",
+      "dateCreated": "2019-05-08 11:53:07.025",
+      "dateStarted": "2019-05-08 13:50:55.297",
+      "dateFinished": "2019-05-08 13:50:55.322",
+      "status": "ERROR",
+      "errorMessage": "java.net.ConnectException: Connection refused (Connection refused)\n\tat java.net.PlainSocketImpl.socketConnect(Native Method)\n\tat java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)\n\tat java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)\n\tat java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)\n\tat java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)\n\tat java.net.Socket.connect(Socket.java:589)\n\tat org.apache.thrift.transport.TSocket.open(TSocket.java:182)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:51)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:37)\n\tat org.apache.commons.pool2.BasePooledObjectFactory.makeObject(BasePooledObjectFactory.java:60)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.getClient(RemoteInterpreterProcess.java:62)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.callRemoteFunction(RemoteInterpreterProcess.java:133)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:228)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:437)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:188)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:315)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 13:50:55.175",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1557323455172_2125697036",
+      "id": "20190508-135055_1112225763",
+      "dateCreated": "2019-05-08 13:50:55.172",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "GPA-竞赛-奖学金\u003d\u003e入党",
+  "id": "2ECMRXR2W",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

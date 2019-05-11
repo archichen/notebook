@@ -1,0 +1,317 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.rdd.RDD\r\nimport org.apache.spark.mllib.fpm.FPGrowth\r\n\r\nval data \u003d sc.textFile(\"/home/ar/workspace/kaoyan-gpa.txt\")\r\n\r\nval transactions: RDD[Array[String]] \u003d data.map(s \u003d\u003e s.trim.split(\u0027,\u0027).distinct)",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-09 02:12:26.883",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.rdd.RDD\nimport org.apache.spark.mllib.fpm.FPGrowth\ndata: org.apache.spark.rdd.RDD[String] \u003d /home/ar/workspace/kaoyan-gpa.txt MapPartitionsRDD[1] at textFile at \u003cconsole\u003e:28\ntransactions: org.apache.spark.rdd.RDD[Array[String]] \u003d MapPartitionsRDD[2] at map at \u003cconsole\u003e:30\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557305853873_-959753544",
+      "id": "20190508-085733_333750401",
+      "dateCreated": "2019-05-08 08:57:33.873",
+      "dateStarted": "2019-05-09 02:12:27.062",
+      "dateFinished": "2019-05-09 02:13:36.338",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val fpg \u003d new FPGrowth()\r\nfpg.setMinSupport(0.01)\r\nfpg.setNumPartitions(10)\r\nval model \u003d fpg.run(transactions)\r\n\r\n// model.freqItemsets.collect().foreach { itemset \u003d\u003e\r\n//   println(itemset.items.mkString(\"[\", \",\", \"]\") + \", \" + itemset.freq)\r\n// }\r\n\r\nval minConfidence \u003d 0.1\r\nval rules \u003d model.generateAssociationRules(minConfidence).collect();\r\nrules.foreach { rule \u003d\u003e\r\n  {\r\n      if(rule.consequent(0) \u003d\u003d \"普通院校\" || rule.consequent(0) \u003d\u003d \"名校\"){\r\n          \r\n            println(\r\n    rule.antecedent.mkString(\"[\", \",\", \"]\")\r\n      + \" \u003d\u003e \" + rule.consequent.mkString(\"[\", \",\", \"]\")\r\n      + \", \" + rule.confidence)\r\n      }\r\n  }\r\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-09 02:13:51.288",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[国家级:优胜奖,国家级:三等奖] \u003d\u003e [名校], 0.5\n[学习进步奖] \u003d\u003e [名校], 0.2857142857142857\n[学习优秀奖] \u003d\u003e [名校], 0.2857142857142857\n[国家级:三等奖,省级:二等奖,B] \u003d\u003e [名校], 1.0\n[国家级:三等奖,A] \u003d\u003e [名校], 0.25\n[国家级:优胜奖,省级:二等奖] \u003d\u003e [名校], 1.0\n[一等奖,省级:三等奖] \u003d\u003e [名校], 0.4\n[一等奖] \u003d\u003e [名校], 0.3888888888888889\n[国家级:三等奖] \u003d\u003e [名校], 0.25\n[省级:一等奖,国家级:三等奖] \u003d\u003e [名校], 0.4\n[三等奖] \u003d\u003e [普通院校], 0.125\n[三等奖] \u003d\u003e [名校], 0.1875\n[学习优秀奖,A] \u003d\u003e [名校], 0.3333333333333333\n[省级:二等奖,B] \u003d\u003e [名校], 0.2857142857142857\n[社会实践奖,A] \u003d\u003e [名校], 0.4\n[B] \u003d\u003e [名校], 0.1590909090909091\n[省级:三等奖,A] \u003d\u003e [名校], 0.29411764705882354\n[A] \u003d\u003e [名校], 0.2916666666666667\n[省级:优胜奖,一等奖] \u003d\u003e [名校], 1.0\n[一等奖,省级:二等奖,A] \u003d\u003e [名校], 0.6\n[国家级:优胜奖,国家级:三等奖,省级:二等奖,B] \u003d\u003e [名校], 1.0\n[市级:三等奖,A] \u003d\u003e [名校], 0.375\n[省级:优胜奖,A] \u003d\u003e [名校], 1.0\n[国家级:优胜奖] \u003d\u003e [名校], 0.5714285714285714\n[二等奖] \u003d\u003e [名校], 0.2631578947368421\n[三等奖,B] \u003d\u003e [名校], 0.2222222222222222\n[省级:优胜奖,省级:二等奖,A] \u003d\u003e [名校], 1.0\n[省级:一等奖,A] \u003d\u003e [名校], 0.42857142857142855\n[国家级:三等奖,B] \u003d\u003e [名校], 0.3333333333333333\n[省级:一等奖,国家级:三等奖,A] \u003d\u003e [名校], 0.4\n[省级:三等奖] \u003d\u003e [名校], 0.20833333333333334\n[二等奖,省级:二等奖] \u003d\u003e [名校], 0.4\n[省级:二等奖] \u003d\u003e [名校], 0.2857142857142857\n[特等奖,A] \u003d\u003e [名校], 0.2\n[国家级:三等奖,省级:二等奖,A] \u003d\u003e [名校], 0.6666666666666666\n[二等奖,A] \u003d\u003e [名校], 0.23076923076923078\n[国家级:优胜奖,A] \u003d\u003e [名校], 0.6666666666666666\n[省级:一等奖] \u003d\u003e [名校], 0.375\n[国家级:优胜奖,省级:二等奖,B] \u003d\u003e [名校], 1.0\n[市级:三等奖,省级:三等奖,A] \u003d\u003e [名校], 0.375\n[一等奖,省级:三等奖,A] \u003d\u003e [名校], 0.4\n[一等奖,A] \u003d\u003e [名校], 0.4117647058823529\n[国家级:优胜奖,国家级:三等奖,省级:二等奖] \u003d\u003e [名校], 1.0\n[市级:三等奖] \u003d\u003e [名校], 0.375\n[省级:二等奖,A] \u003d\u003e [普通院校], 0.10526315789473684\n[省级:二等奖,A] \u003d\u003e [名校], 0.3157894736842105\n[国家级:优胜奖,国家级:三等奖,B] \u003d\u003e [名校], 0.6666666666666666\n[国家级:优胜奖,B] \u003d\u003e [名校], 0.5\n[省级:优胜奖,一等奖,省级:二等奖,A] \u003d\u003e [名校], 1.0\n[国家级:三等奖,省级:二等奖] \u003d\u003e [名校], 0.5714285714285714\n[省级:优胜奖] \u003d\u003e [名校], 0.7142857142857143\n[一等奖,省级:二等奖] \u003d\u003e [名校], 0.6\n[省级:优胜奖,一等奖,省级:二等奖] \u003d\u003e [名校], 1.0\n[省级:一等奖,省级:二等奖,A] \u003d\u003e [名校], 0.6666666666666666\n[省级:优胜奖,一等奖,A] \u003d\u003e [名校], 1.0\n[省级:一等奖,省级:二等奖] \u003d\u003e [名校], 0.6666666666666666\n[特等奖] \u003d\u003e [名校], 0.16666666666666666\n[省级:一等奖,国家级:三等奖,省级:二等奖] \u003d\u003e [名校], 0.6666666666666666\n[省级:一等奖,国家级:三等奖,省级:二等奖,A] \u003d\u003e [名校], 0.6666666666666666\n[二等奖,B] \u003d\u003e [名校], 0.3333333333333333\n[市级:三等奖,省级:三等奖] \u003d\u003e [名校], 0.375\n[社会实践奖] \u003d\u003e [名校], 0.3\n[省级:优胜奖,省级:二等奖] \u003d\u003e [名校], 1.0\nfpg: org.apache.spark.mllib.fpm.FPGrowth \u003d org.apache.spark.mllib.fpm.FPGrowth@5c1f967f\nmodel: org.apache.spark.mllib.fpm.FPGrowthModel[String] \u003d org.apache.spark.mllib.fpm.FPGrowthModel@a425f41\nminConfidence: Double \u003d 0.1\nrules: Array[org.apache.spark.mllib.fpm.AssociationRules.Rule[String]] \u003d Array({C,国家级:二等奖} \u003d\u003e {省级:三等奖}: (confidence: 1.0; lift: Some(5.041666666666667)), {C,国家级:二等奖} \u003d\u003e {国家级:三等奖}: (confidence: 1.0; lift: Some(7.5625)), {C,国家级:二等奖} \u003d\u003e {省级:二等奖}: (confidence: 1.0; lift: Some(4.321428571428571)), {社会实践奖,名校} \u003d\u003e {A}: (confidence: 0.6666666666666666; lift: Some(1.1203703703703702)), {C,国家级:二等奖,省级:三等奖} \u003d\u003e {省级:二等奖}: (confidence: 1.0; lift: Some(4.321428571428571)), {C,国家级:二等奖,省级:三等奖} \u003d\u003e {国家级:三等奖}: (confidence: 1.0; lift: Some(7.5625)), {学习优秀奖,省级:二等奖} \u003d\u003e {A}: (confidence: 1.0; ..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557293022442_-1359188709",
+      "id": "20190508-052342_1380377597",
+      "dateCreated": "2019-05-08 05:23:42.446",
+      "dateStarted": "2019-05-09 02:13:51.375",
+      "dateFinished": "2019-05-09 02:14:01.288",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import Array._\ncase class Kaoyan(antecedent: Array[String], consequent: String, confidence: Double)\n\nvar kaoyantable:Array[Kaoyan] \u003d new Array[Kaoyan](0);\nrules.foreach(item \u003d\u003e {\n    if(item.consequent(0) \u003d\u003d \"普通院校\" || item.consequent(0) \u003d\u003d \"名校\"){\n        kaoyantable \u003d concat(kaoyantable, Array(Kaoyan(item.antecedent, item.consequent(0), item.confidence)));\n    }\n});\nval tmp \u003d sc.parallelize(kaoyantable).toDF()\ntmp.registerTempTable(\"kaoyan\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-09 02:14:09.454",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "warning: there was one deprecation warning; re-run with -deprecation for details\nimport sqlContext.implicits._\nimport Array._\ndefined class Kaoyan\nkaoyantable: Array[Kaoyan] \u003d Array(Kaoyan([Ljava.lang.String;@2908f83b,名校,0.5), Kaoyan([Ljava.lang.String;@1c0e686b,名校,0.2857142857142857), Kaoyan([Ljava.lang.String;@3ae2822c,名校,0.2857142857142857), Kaoyan([Ljava.lang.String;@1934e4a0,名校,1.0), Kaoyan([Ljava.lang.String;@77931e9d,名校,0.25), Kaoyan([Ljava.lang.String;@18317d34,名校,1.0), Kaoyan([Ljava.lang.String;@36ec6ffc,名校,0.4), Kaoyan([Ljava.lang.String;@8c39c65,名校,0.3888888888888889), Kaoyan([Ljava.lang.String;@67cb0c16,名校,0.25), Kaoyan([Ljava.lang.String;@74800506,名校,0.4), Kaoyan([Ljava.lang.String;@214607e5,普通院校,0.125), Kaoyan([Ljava.lang.String;@214607e5,名校,0.1875), Kaoyan([Ljava.lang.String;@3572871c,名校,0.3333333333333333), Kaoyan([Ljava.lang.String;@ae68618,名校,0.285..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557293032270_-236937114",
+      "id": "20190508-052352_475012473",
+      "dateCreated": "2019-05-08 05:23:52.271",
+      "dateStarted": "2019-05-09 02:14:09.545",
+      "dateFinished": "2019-05-09 02:14:25.446",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql \nselect\n* \nfrom \nkaoyan",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-11 04:52:07.028",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": true,
+              "setting": {
+                "table": {
+                  "tableGridState": {
+                    "columns": [
+                      {
+                        "name": "antecedent",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {
+                          "priority": 0.0,
+                          "direction": "desc"
+                        },
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "consequent",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "confidence",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      }
+                    ],
+                    "scrollFocus": {},
+                    "selection": [],
+                    "grouping": {
+                      "grouping": [],
+                      "aggregations": [],
+                      "rowExpandedStates": {}
+                    },
+                    "treeView": {},
+                    "pagination": {
+                      "paginationCurrentPage": 1.0,
+                      "paginationPageSize": 250.0
+                    }
+                  },
+                  "tableColumnTypeState": {
+                    "names": {
+                      "antecedent": "string",
+                      "consequent": "string",
+                      "confidence": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "stackedAreaChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default",
+                  "stacked": false
+                },
+                "pieChart": {},
+                "lineChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "rotate"
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "antecedent",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "confidence",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "antecedent\tconsequent\tconfidence\nWrappedArray(国家级:优胜奖, 国家级:三等奖)\t名校\t0.5\nWrappedArray(学习进步奖)\t名校\t0.2857142857142857\nWrappedArray(学习优秀奖)\t名校\t0.2857142857142857\nWrappedArray(国家级:三等奖, 省级:二等奖, B)\t名校\t1.0\nWrappedArray(国家级:三等奖, A)\t名校\t0.25\nWrappedArray(国家级:优胜奖, 省级:二等奖)\t名校\t1.0\nWrappedArray(一等奖, 省级:三等奖)\t名校\t0.4\nWrappedArray(一等奖)\t名校\t0.3888888888888889\nWrappedArray(国家级:三等奖)\t名校\t0.25\nWrappedArray(省级:一等奖, 国家级:三等奖)\t名校\t0.4\nWrappedArray(三等奖)\t普通院校\t0.125\nWrappedArray(三等奖)\t名校\t0.1875\nWrappedArray(学习优秀奖, A)\t名校\t0.3333333333333333\nWrappedArray(省级:二等奖, B)\t名校\t0.2857142857142857\nWrappedArray(社会实践奖, A)\t名校\t0.4\nWrappedArray(B)\t名校\t0.1590909090909091\nWrappedArray(省级:三等奖, A)\t名校\t0.29411764705882354\nWrappedArray(A)\t名校\t0.2916666666666667\nWrappedArray(省级:优胜奖, 一等奖)\t名校\t1.0\nWrappedArray(一等奖, 省级:二等奖, A)\t名校\t0.6\nWrappedArray(国家级:优胜奖, 国家级:三等奖, 省级:二等奖, B)\t名校\t1.0\nWrappedArray(市级:三等奖, A)\t名校\t0.375\nWrappedArray(省级:优胜奖, A)\t名校\t1.0\nWrappedArray(国家级:优胜奖)\t名校\t0.5714285714285714\nWrappedArray(二等奖)\t名校\t0.2631578947368421\nWrappedArray(三等奖, B)\t名校\t0.2222222222222222\nWrappedArray(省级:优胜奖, 省级:二等奖, A)\t名校\t1.0\nWrappedArray(省级:一等奖, A)\t名校\t0.42857142857142855\nWrappedArray(国家级:三等奖, B)\t名校\t0.3333333333333333\nWrappedArray(省级:一等奖, 国家级:三等奖, A)\t名校\t0.4\nWrappedArray(省级:三等奖)\t名校\t0.20833333333333334\nWrappedArray(二等奖, 省级:二等奖)\t名校\t0.4\nWrappedArray(省级:二等奖)\t名校\t0.2857142857142857\nWrappedArray(特等奖, A)\t名校\t0.2\nWrappedArray(国家级:三等奖, 省级:二等奖, A)\t名校\t0.6666666666666666\nWrappedArray(二等奖, A)\t名校\t0.23076923076923078\nWrappedArray(国家级:优胜奖, A)\t名校\t0.6666666666666666\nWrappedArray(省级:一等奖)\t名校\t0.375\nWrappedArray(国家级:优胜奖, 省级:二等奖, B)\t名校\t1.0\nWrappedArray(市级:三等奖, 省级:三等奖, A)\t名校\t0.375\nWrappedArray(一等奖, 省级:三等奖, A)\t名校\t0.4\nWrappedArray(一等奖, A)\t名校\t0.4117647058823529\nWrappedArray(国家级:优胜奖, 国家级:三等奖, 省级:二等奖)\t名校\t1.0\nWrappedArray(市级:三等奖)\t名校\t0.375\nWrappedArray(省级:二等奖, A)\t普通院校\t0.10526315789473684\nWrappedArray(省级:二等奖, A)\t名校\t0.3157894736842105\nWrappedArray(国家级:优胜奖, 国家级:三等奖, B)\t名校\t0.6666666666666666\nWrappedArray(国家级:优胜奖, B)\t名校\t0.5\nWrappedArray(省级:优胜奖, 一等奖, 省级:二等奖, A)\t名校\t1.0\nWrappedArray(国家级:三等奖, 省级:二等奖)\t名校\t0.5714285714285714\nWrappedArray(省级:优胜奖)\t名校\t0.7142857142857143\nWrappedArray(一等奖, 省级:二等奖)\t名校\t0.6\nWrappedArray(省级:优胜奖, 一等奖, 省级:二等奖)\t名校\t1.0\nWrappedArray(省级:一等奖, 省级:二等奖, A)\t名校\t0.6666666666666666\nWrappedArray(省级:优胜奖, 一等奖, A)\t名校\t1.0\nWrappedArray(省级:一等奖, 省级:二等奖)\t名校\t0.6666666666666666\nWrappedArray(特等奖)\t名校\t0.16666666666666666\nWrappedArray(省级:一等奖, 国家级:三等奖, 省级:二等奖)\t名校\t0.6666666666666666\nWrappedArray(省级:一等奖, 国家级:三等奖, 省级:二等奖, A)\t名校\t0.6666666666666666\nWrappedArray(二等奖, B)\t名校\t0.3333333333333333\nWrappedArray(市级:三等奖, 省级:三等奖)\t名校\t0.375\nWrappedArray(社会实践奖)\t名校\t0.3\nWrappedArray(省级:优胜奖, 省级:二等奖)\t名校\t1.0\n"
+          },
+          {
+            "type": "TEXT",
+            "data": ""
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557306575092_-2092521255",
+      "id": "20190508-090935_1557876003",
+      "dateCreated": "2019-05-08 09:09:35.092",
+      "dateStarted": "2019-05-09 02:15:09.184",
+      "dateFinished": "2019-05-09 02:15:10.959",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%spark\nvar count:Int \u003d 0;\nrules.foreach { rule \u003d\u003e\n  {\n      if(rule.consequent(0) \u003d\u003d \"普通院校\" || rule.consequent(0) \u003d\u003d \"名校\"){\n        var map \u003d new java.util.HashMap[String, String]();\n        map.put(\"antecedent\", rule.antecedent.mkString(\",\"));\n        map.put(\"consequent\", rule.consequent(0));\n        map.put(\"confidence\", rule.confidence + \"\");\n        count +\u003d 1;\n        jedis.hmset(\"ky_gpa_rule\" + count, map)\n      }\n  }\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 14:08:45.458",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1557310473042_331780446",
+      "id": "20190508-101433_2016141186",
+      "dateCreated": "2019-05-08 10:14:33.042",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "GPA-竞赛-奖学金\u003d\u003e考研",
+  "id": "2EC7V945A",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

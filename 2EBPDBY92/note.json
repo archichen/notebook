@@ -1,0 +1,304 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.rdd.RDD\r\nimport org.apache.spark.mllib.fpm.FPGrowth\r\n\r\nval data \u003d sc.textFile(\"/home/ar/workspace/kaoyan-scores.txt\")\r\n\r\nval transactions: RDD[Array[String]] \u003d data.map(s \u003d\u003e s.trim.split(\u0027,\u0027).distinct)",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 11:54:33.119",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.rdd.RDD\nimport org.apache.spark.mllib.fpm.FPGrowth\ndata: org.apache.spark.rdd.RDD[String] \u003d /home/ar/workspace/kaoyan-scores.txt MapPartitionsRDD[590] at textFile at \u003cconsole\u003e:67\ntransactions: org.apache.spark.rdd.RDD[Array[String]] \u003d MapPartitionsRDD[591] at map at \u003cconsole\u003e:69\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557315404329_-664715661",
+      "id": "20190508-085733_333750401",
+      "dateCreated": "2019-05-08 11:36:44.329",
+      "dateStarted": "2019-05-08 11:54:33.150",
+      "dateFinished": "2019-05-08 11:54:34.827",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val fpg \u003d new FPGrowth()\r\nfpg.setMinSupport(0.1)\r\nfpg.setNumPartitions(10)\r\nval model \u003d fpg.run(transactions)\r\n\r\n// model.freqItemsets.collect().foreach { itemset \u003d\u003e\r\n//   println(itemset.items.mkString(\"[\", \",\", \"]\") + \", \" + itemset.freq)\r\n// }\r\n\r\nval minConfidence \u003d 0.8\r\nval rules \u003d model.generateAssociationRules(minConfidence).collect();\r\nrules.foreach { rule \u003d\u003e\r\n  {\r\n      if(rule.consequent(0) \u003d\u003d \"普通院校\" || rule.consequent(0) \u003d\u003d \"名校\"){\r\n          \r\n            println(\r\n    rule.antecedent.mkString(\"[\", \",\", \"]\")\r\n      + \" \u003d\u003e \" + rule.consequent.mkString(\"[\", \",\", \"]\")\r\n      + \", \" + rule.confidence)\r\n      }\r\n  }\r\n}",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 11:54:33.068",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "org.apache.spark.SparkException: Job 130 cancelled part of cancelled job group zeppelin-2EBPDBY92-20190508-052342_1380377597\n  at org.apache.spark.scheduler.DAGScheduler.org$apache$spark$scheduler$DAGScheduler$$failJobAndIndependentStages(DAGScheduler.scala:1889)\n  at org.apache.spark.scheduler.DAGScheduler.handleJobCancellation(DAGScheduler.scala:1824)\n  at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply$mcVI$sp(DAGScheduler.scala:906)\n  at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:906)\n  at org.apache.spark.scheduler.DAGScheduler$$anonfun$handleJobGroupCancelled$1.apply(DAGScheduler.scala:906)\n  at scala.collection.mutable.HashSet.foreach(HashSet.scala:78)\n  at org.apache.spark.scheduler.DAGScheduler.handleJobGroupCancelled(DAGScheduler.scala:906)\n  at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:2079)\n  at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2059)\n  at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2048)\n  at org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:49)\n  at org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:737)\n  at org.apache.spark.SparkContext.runJob(SparkContext.scala:2061)\n  at org.apache.spark.SparkContext.runJob(SparkContext.scala:2082)\n  at org.apache.spark.SparkContext.runJob(SparkContext.scala:2101)\n  at org.apache.spark.SparkContext.runJob(SparkContext.scala:2126)\n  at org.apache.spark.rdd.RDD$$anonfun$collect$1.apply(RDD.scala:945)\n  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)\n  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:112)\n  at org.apache.spark.rdd.RDD.withScope(RDD.scala:363)\n  at org.apache.spark.rdd.RDD.collect(RDD.scala:944)\n  ... 63 elided\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557315404337_-77518444",
+      "id": "20190508-052342_1380377597",
+      "dateCreated": "2019-05-08 11:36:44.337",
+      "dateStarted": "2019-05-08 11:37:33.534",
+      "dateFinished": "2019-05-08 11:54:04.802",
+      "status": "ABORT",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import Array._\ncase class Kaoyan(antecedent: Array[String], consequent: String, confidence: Double)\n\nvar kaoyantable:Array[Kaoyan] \u003d new Array[Kaoyan](0);\nrules.foreach(item \u003d\u003e {\n    if(item.consequent(0) \u003d\u003d \"普通院校\" || item.consequent(0) \u003d\u003d \"名校\"){\n        kaoyantable \u003d concat(kaoyantable, Array(Kaoyan(item.antecedent, item.consequent(0), item.confidence)));\n    }\n});\nval tmp \u003d sc.parallelize(kaoyantable).toDF()\ntmp.registerTempTable(\"kaoyan\")",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 11:36:44.351",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "warning: there was one deprecation warning; re-run with -deprecation for details\nimport sqlContext.implicits._\nimport Array._\ndefined class Kaoyan\nkaoyantable: Array[Kaoyan] \u003d Array(Kaoyan([Ljava.lang.String;@557fc528,名校,0.5), Kaoyan([Ljava.lang.String;@1a3d3018,名校,0.2857142857142857), Kaoyan([Ljava.lang.String;@4dcade6b,名校,0.2857142857142857), Kaoyan([Ljava.lang.String;@3b5a23fe,名校,1.0), Kaoyan([Ljava.lang.String;@10a7e738,名校,0.25), Kaoyan([Ljava.lang.String;@63e9a8c4,名校,1.0), Kaoyan([Ljava.lang.String;@78cb0b54,名校,0.4), Kaoyan([Ljava.lang.String;@12e48260,名校,0.3888888888888889), Kaoyan([Ljava.lang.String;@3d552923,名校,0.25), Kaoyan([Ljava.lang.String;@135419c5,名校,0.4), Kaoyan([Ljava.lang.String;@33652150,普通院校,0.125), Kaoyan([Ljava.lang.String;@33652150,名校,0.1875), Kaoyan([Ljava.lang.String;@52442de,名校,0.3333333333333333), Kaoyan([Ljava.lang.String;@112c6f68,名校,0.28..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557315404350_455330532",
+      "id": "20190508-052352_475012473",
+      "dateCreated": "2019-05-08 11:36:44.350",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql \nselect\n* \nfrom \nkaoyan",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 11:54:18.933",
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "lineChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {
+                    "columns": [
+                      {
+                        "name": "antecedent",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {
+                          "priority": 0.0,
+                          "direction": "desc"
+                        },
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "consequent",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      },
+                      {
+                        "name": "confidence",
+                        "visible": true,
+                        "width": "*",
+                        "sort": {},
+                        "filters": [
+                          {}
+                        ],
+                        "pinned": ""
+                      }
+                    ],
+                    "scrollFocus": {},
+                    "selection": [],
+                    "grouping": {
+                      "grouping": [],
+                      "aggregations": [],
+                      "rowExpandedStates": {}
+                    },
+                    "treeView": {},
+                    "pagination": {
+                      "paginationCurrentPage": 1.0,
+                      "paginationPageSize": 250.0
+                    }
+                  },
+                  "tableColumnTypeState": {
+                    "names": {
+                      "antecedent": "string",
+                      "consequent": "string",
+                      "confidence": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "stackedAreaChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default",
+                  "stacked": false
+                },
+                "pieChart": {},
+                "lineChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "rotate"
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "antecedent",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "confidence",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "antecedent\tconsequent\tconfidence\nWrappedArray(国家级:优胜奖, 国家级:三等奖)\t名校\t0.5\nWrappedArray(学习进步奖)\t名校\t0.2857142857142857\nWrappedArray(学习优秀奖)\t名校\t0.2857142857142857\nWrappedArray(国家级:三等奖, 省级:二等奖, B)\t名校\t1.0\nWrappedArray(国家级:三等奖, A)\t名校\t0.25\nWrappedArray(国家级:优胜奖, 省级:二等奖)\t名校\t1.0\nWrappedArray(一等奖, 省级:三等奖)\t名校\t0.4\nWrappedArray(一等奖)\t名校\t0.3888888888888889\nWrappedArray(国家级:三等奖)\t名校\t0.25\nWrappedArray(省级:一等奖, 国家级:三等奖)\t名校\t0.4\nWrappedArray(三等奖)\t普通院校\t0.125\nWrappedArray(三等奖)\t名校\t0.1875\nWrappedArray(学习优秀奖, A)\t名校\t0.3333333333333333\nWrappedArray(省级:二等奖, B)\t名校\t0.2857142857142857\nWrappedArray(社会实践奖, A)\t名校\t0.4\nWrappedArray(B)\t名校\t0.1590909090909091\nWrappedArray(省级:三等奖, A)\t名校\t0.29411764705882354\nWrappedArray(A)\t名校\t0.2916666666666667\nWrappedArray(省级:优胜奖, 一等奖)\t名校\t1.0\nWrappedArray(一等奖, 省级:二等奖, A)\t名校\t0.6\nWrappedArray(国家级:优胜奖, 国家级:三等奖, 省级:二等奖, B)\t名校\t1.0\nWrappedArray(市级:三等奖, A)\t名校\t0.375\nWrappedArray(省级:优胜奖, A)\t名校\t1.0\nWrappedArray(国家级:优胜奖)\t名校\t0.5714285714285714\nWrappedArray(二等奖)\t名校\t0.2631578947368421\nWrappedArray(三等奖, B)\t名校\t0.2222222222222222\nWrappedArray(省级:优胜奖, 省级:二等奖, A)\t名校\t1.0\nWrappedArray(省级:一等奖, A)\t名校\t0.42857142857142855\nWrappedArray(国家级:三等奖, B)\t名校\t0.3333333333333333\nWrappedArray(省级:一等奖, 国家级:三等奖, A)\t名校\t0.4\nWrappedArray(省级:三等奖)\t名校\t0.20833333333333334\nWrappedArray(二等奖, 省级:二等奖)\t名校\t0.4\nWrappedArray(省级:二等奖)\t名校\t0.2857142857142857\nWrappedArray(特等奖, A)\t名校\t0.2\nWrappedArray(国家级:三等奖, 省级:二等奖, A)\t名校\t0.6666666666666666\nWrappedArray(二等奖, A)\t名校\t0.23076923076923078\nWrappedArray(国家级:优胜奖, A)\t名校\t0.6666666666666666\nWrappedArray(省级:一等奖)\t名校\t0.375\nWrappedArray(国家级:优胜奖, 省级:二等奖, B)\t名校\t1.0\nWrappedArray(市级:三等奖, 省级:三等奖, A)\t名校\t0.375\nWrappedArray(一等奖, 省级:三等奖, A)\t名校\t0.4\nWrappedArray(一等奖, A)\t名校\t0.4117647058823529\nWrappedArray(国家级:优胜奖, 国家级:三等奖, 省级:二等奖)\t名校\t1.0\nWrappedArray(市级:三等奖)\t名校\t0.375\nWrappedArray(省级:二等奖, A)\t普通院校\t0.10526315789473684\nWrappedArray(省级:二等奖, A)\t名校\t0.3157894736842105\nWrappedArray(国家级:优胜奖, 国家级:三等奖, B)\t名校\t0.6666666666666666\nWrappedArray(国家级:优胜奖, B)\t名校\t0.5\nWrappedArray(省级:优胜奖, 一等奖, 省级:二等奖, A)\t名校\t1.0\nWrappedArray(国家级:三等奖, 省级:二等奖)\t名校\t0.5714285714285714\nWrappedArray(省级:优胜奖)\t名校\t0.7142857142857143\nWrappedArray(一等奖, 省级:二等奖)\t名校\t0.6\nWrappedArray(省级:优胜奖, 一等奖, 省级:二等奖)\t名校\t1.0\nWrappedArray(省级:一等奖, 省级:二等奖, A)\t名校\t0.6666666666666666\nWrappedArray(省级:优胜奖, 一等奖, A)\t名校\t1.0\nWrappedArray(省级:一等奖, 省级:二等奖)\t名校\t0.6666666666666666\nWrappedArray(特等奖)\t名校\t0.16666666666666666\nWrappedArray(省级:一等奖, 国家级:三等奖, 省级:二等奖)\t名校\t0.6666666666666666\nWrappedArray(省级:一等奖, 国家级:三等奖, 省级:二等奖, A)\t名校\t0.6666666666666666\nWrappedArray(二等奖, B)\t名校\t0.3333333333333333\nWrappedArray(市级:三等奖, 省级:三等奖)\t名校\t0.375\nWrappedArray(社会实践奖)\t名校\t0.3\nWrappedArray(省级:优胜奖, 省级:二等奖)\t名校\t1.0\n"
+          },
+          {
+            "type": "TEXT",
+            "data": ""
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1557315404351_682678055",
+      "id": "20190508-090935_1557876003",
+      "dateCreated": "2019-05-08 11:36:44.351",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%pyspark\n",
+      "user": "anonymous",
+      "dateUpdated": "2019-05-08 11:36:44.351",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1557315404351_432849565",
+      "id": "20190508-101433_2016141186",
+      "dateCreated": "2019-05-08 11:36:44.351",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "成绩-竞赛-奖学金\u003d\u003e考研",
+  "id": "2EBPDBY92",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "spark:shared_process": []
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
